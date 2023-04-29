@@ -96,13 +96,24 @@ function gameOfLife() {
 
     renderCells(cell, cellStroke, strokeWidth)
 
+    let cellsCollection = new Set(cells)
+
+    function checkNeighbourByX(dimension, step) {
+        if ((dimension - step * cell).toFixed(1) <= 0) return canvas.width - cell + strokeWidth
+        if ((dimension - step * cell).toFixed(1) >= canvas.width) return 0 + strokeWidth
+        return +(dimension - step * cell).toFixed(1)
+    }
+
+    function checkNeighbourByY(dimension, step) {
+        if ((dimension - step * cell).toFixed(1) <= 0) return canvas.height - cell + strokeWidth
+        if ((dimension - step * cell).toFixed(1) >= canvas.height) return 0 + strokeWidth
+        return +(dimension - step * cell).toFixed(1)
+    }
+
     function calculateNextGeneration() {
-        let setUnits = new Set(units)
-        // console.log('before if')
+        let unitsCollection = new Set(units)
         if (units.length) {
-            // console.log('after if')
-            cells.forEach((unit, key) => {
-                // console.log(unit)
+            cellsCollection.forEach((unit, key) => {
                 let [x, y] = [JSON.parse(unit)[0], JSON.parse(unit)[1]]
                 let countOfAliveNeighbours = 0, stepX = 1, stepY = 1
                 for (let c = 0; c < 9; c++) {
@@ -110,20 +121,18 @@ function gameOfLife() {
                         stepX = 1
                         stepY--
                     }
-                    // console.log(c,`[${+(x - stepX * cell).toFixed(1)}, ${+(y - stepY * cell).toFixed(1)}]`)
-                    if (setUnits.has(`[${+(x - stepX * cell).toFixed(1)}, ${+(y - stepY * cell).toFixed(1)}]`) && c !== 4) {
+                    if (c !== 4 && unitsCollection.has(`[${checkNeighbourByX(x, stepX)}, ${checkNeighbourByY(y, stepY)}]`)) {
                         countOfAliveNeighbours++
                     }
                     stepX--
                 }
-                // console.log(x,y,'n ' + countOfAliveNeighbours)
-                if (!setUnits.has(unit) && countOfAliveNeighbours === 3) {
 
+                if (!unitsCollection.has(unit) && countOfAliveNeighbours === 3) {
                     units.push(unit)
                     context.fillRect(x, y, cellBoundings, cellBoundings)
                 }
 
-                if (setUnits.has(unit) && (countOfAliveNeighbours < 2 || countOfAliveNeighbours > 3)) {
+                if (unitsCollection.has(unit) && (countOfAliveNeighbours < 2 || countOfAliveNeighbours > 3)) {
                     units.splice(units.indexOf(unit), 1)
                     context.clearRect(x, y, cellBoundings, cellBoundings)
                 }
@@ -132,7 +141,7 @@ function gameOfLife() {
     }
 
     function startCalculating() {
-        setInterval(() => calculateNextGeneration(), 100)
+        setInterval(() => calculateNextGeneration(), 0)
     }
 
     $('start').addEventListener('click', () => startCalculating())
