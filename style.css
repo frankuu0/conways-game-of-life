@@ -9,6 +9,7 @@ body {
     height: 100vh;
     display: grid;
     place-items: center;
+    background-color: ghostwhite;
 }
 
 #area {
@@ -23,4 +24,22 @@ button {
     font-weight: 600;
     border: 2px solid #41ab5a;
     cursor: pointer;
+}
+
+#start {
+    background-color: #344fb7;
+    border: 2px solid #17498d;
+}
+
+.info {
+    width: 80%;
+    text-align: center;
+}
+
+.info p {
+    margin-bottom: 20px;
+}
+
+ins {
+    font-size: 12px;
 }

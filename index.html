@@ -6,10 +6,15 @@
     <link rel="stylesheet" href="style.css">
 </head>
 <body>
+    <div class="info">
+        <p>Количестово клеток: [всего - <span id="all"></span>; по х - <span id="xDim"></span>; по y - <span id="yDim"></span>]</p>
+        <ins>Перед запуском задайте начальное состояние вручную. Также предусмотрена возможность сгенерировать наначальное состояние.</ins>
+    </div>
     <canvas id="area"></canvas>
     <div class="buttons">
         <button id="generate">Сгенерировать</button>
         <button id="clear">Очистить</button>
+        <button id="start">Запуск</button>
     </div>
     <script src="script.js"></script>
 </body>
