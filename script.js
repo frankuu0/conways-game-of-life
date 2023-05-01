@@ -12,16 +12,17 @@ function gameOfLife() {
 
     canvas = $('area')
 
-    canvas.setAttribute('width', Math.floor(areaSize.width * 0.8 / 100) * 100)
-    canvas.setAttribute('height', Math.floor(areaSize.height * 0.8 / 100) * 100)
-
-    context = canvas.getContext('2d')
-
     //ширина и высота каждой клетки. количество клеток зависит от размера экрана и клетки.
     cell = 10
     cellStroke = "#8c8c8c"
-    strokeWidth = .1
+    strokeWidth = 1
     cellBoundings = cell - strokeWidth * 2
+
+    canvas.setAttribute('width', Math.floor(areaSize.width * 0.8 / cell) * cell)
+    canvas.setAttribute('height', Math.floor(areaSize.height * 0.8 / cell) * cell)
+
+    context = canvas.getContext('2d')
+
 
     function renderCells(size, color, stroke) {
         for (let x = 0; x < canvas.width; x += size) {
@@ -98,22 +99,17 @@ function gameOfLife() {
 
     let cellsCollection = new Set(cells)
 
-    function checkNeighbourByX(dimension, step) {
-        if ((dimension - step * cell).toFixed(1) <= 0) return canvas.width - cell + strokeWidth
-        if ((dimension - step * cell).toFixed(1) >= canvas.width) return 0 + strokeWidth
+    function checkNeighbour(dimension, step, canvasSide) {
+        if ((dimension - step * cell).toFixed(1) <= 0) return canvasSide - cell + strokeWidth
+        if ((dimension - step * cell).toFixed(1) >= canvasSide) return 0 + strokeWidth
         return +(dimension - step * cell).toFixed(1)
     }
 
-    function checkNeighbourByY(dimension, step) {
-        if ((dimension - step * cell).toFixed(1) <= 0) return canvas.height - cell + strokeWidth
-        if ((dimension - step * cell).toFixed(1) >= canvas.height) return 0 + strokeWidth
-        return +(dimension - step * cell).toFixed(1)
-    }
 
     function calculateNextGeneration() {
         let unitsCollection = new Set(units)
         if (units.length) {
-            cellsCollection.forEach((unit, key) => {
+            for (let unit of cellsCollection) {
                 let [x, y] = [JSON.parse(unit)[0], JSON.parse(unit)[1]]
                 let countOfAliveNeighbours = 0, stepX = 1, stepY = 1
                 for (let c = 0; c < 9; c++) {
@@ -121,7 +117,7 @@ function gameOfLife() {
                         stepX = 1
                         stepY--
                     }
-                    if (c !== 4 && unitsCollection.has(`[${checkNeighbourByX(x, stepX)}, ${checkNeighbourByY(y, stepY)}]`)) {
+                    if (c !== 4 && unitsCollection.has(`[${checkNeighbour(x, stepX, canvas.width)}, ${checkNeighbour(y, stepY, canvas.height)}]`)) {
                         countOfAliveNeighbours++
                     }
                     stepX--
@@ -136,12 +132,12 @@ function gameOfLife() {
                     units.splice(units.indexOf(unit), 1)
                     context.clearRect(x, y, cellBoundings, cellBoundings)
                 }
-            })
+            }
         }
     }
 
     function startCalculating() {
-        setInterval(() => calculateNextGeneration(), 0)
+        setInterval(() => calculateNextGeneration(), 100)
     }
 
     $('start').addEventListener('click', () => startCalculating())
