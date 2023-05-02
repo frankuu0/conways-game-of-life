@@ -140,7 +140,7 @@ function gameOfLife() {
     let gameDelay
 
     function startCalculating() {
-        gameDelay = setInterval(() => calculateNextGeneration(), 100)
+        gameDelay = setInterval(calculateNextGeneration(), 100)
     }
 
     $('start').addEventListener('click', () => startCalculating())
