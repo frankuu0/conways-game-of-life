@@ -89,6 +89,7 @@ function gameOfLife() {
             let [x, y] = [JSON.parse(unit)[0], JSON.parse(unit)[1]]
             context.clearRect(x, y, cellBoundings, cellBoundings)
         })
+        clearInterval(() => calculateNextGeneration(), 100)
         units = []
     }
 
