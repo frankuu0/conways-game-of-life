@@ -89,7 +89,6 @@ function gameOfLife() {
             let [x, y] = [JSON.parse(unit)[0], JSON.parse(unit)[1]]
             context.clearRect(x, y, cellBoundings, cellBoundings)
         })
-        clearInterval(gameDelay)
         units = []
     }
 
@@ -136,11 +135,9 @@ function gameOfLife() {
             }
         }
     }
-    
-    let gameDelay
 
     function startCalculating() {
-        gameDelay = setInterval(calculateNextGeneration(), 100)
+        setInterval(() => calculateNextGeneration(), 100)
     }
 
     $('start').addEventListener('click', () => startCalculating())
