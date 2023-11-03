@@ -85,7 +85,11 @@ function gameOfLife() {
     }
 
     function removeUnits() {
-        location.reload()
+        units.forEach(unit => {
+             let [x, y] = [JSON.parse(unit)[0], JSON.parse(unit)[1]]
+             context.clearRect(x, y, cellBoundings, cellBoundings)
+         })
+         units = []
     }
 
     $('generate').addEventListener('click', () => renderRandomUnits())
