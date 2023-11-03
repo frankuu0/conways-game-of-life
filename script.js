@@ -85,7 +85,7 @@ function gameOfLife() {
     }
 
     function removeUnits() {
-        window.reload()
+        location.reload()
     }
 
     $('generate').addEventListener('click', () => renderRandomUnits())
